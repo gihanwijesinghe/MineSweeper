@@ -25,6 +25,8 @@ namespace MineSweeper
 
             _mineField.Initialize(gridSize, numberOfMines);
             DisplayMineField();
+
+            PlayGame();
         }
 
         public int PromptGridSize()
@@ -59,7 +61,22 @@ namespace MineSweeper
 
         public void PlayGame()
         {
-            var selectedSquare = _inputOutputCommand.PromptUser(ConsoleCommandConstants.SelectSquareToReveale);
+            var selectedSquare = PromptSquareSelection();
+        }
+
+        public MineSquare PromptSquareSelection()
+        {
+            var input = _inputOutputCommand.PromptUser(ConsoleCommandConstants.SelectSquareToReveale);
+
+            var res = _inputValidator.ValidateSquareSelection(input, _mineField.GridSize);
+
+            if (!res.IsSuccess)
+            {
+                _inputOutputCommand.DisplayError(res.Errors);
+                return PromptSquareSelection();
+            }
+
+            return res.Result;
         }
 
         public void DisplayMineField()
