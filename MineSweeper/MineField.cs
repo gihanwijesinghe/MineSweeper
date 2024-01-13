@@ -1,4 +1,7 @@
-﻿namespace MineSweeper
+﻿using MineSweeper.AppConstants;
+using MineSweeper.Helper;
+
+namespace MineSweeper
 {
     public class MineField
     {
@@ -7,13 +10,9 @@
         public IList<MineSquare> Squares { get; set; }
         public int GridSize { get; set; }
 
-        public MineField() 
-        {
-            Squares = new List<MineSquare>();
-        }
-
         public void Initialize(int gridSize, int mines)
         {
+            Squares = new List<MineSquare>();
             GridSize = gridSize;
 
             CreateInitialMineField(gridSize);
@@ -30,6 +29,78 @@
                     Squares.Add(square);
                 }
             }
+        }
+
+        public MineSquare GetSquareByPosition(int x, int y)
+        {
+            var fieldSquare = Squares.Single(s => s.X == x && s.Y == y);
+            return fieldSquare;
+        }
+
+        public int RevealSquare(int positionX, int positionY)
+        {
+            var fieldSquare = Squares.Single(s => s.X == positionX && s.Y == positionY);
+
+            if (fieldSquare.IsRevealed) return fieldSquare.NumberOfMinesAround;
+
+            var count = 0;
+            for(var i = -1; i < 2; i++)
+            {
+                for(var j = -1;j < 2; j++)
+                {
+                    if (i == 0 && j == 0) continue;
+
+                    var x = positionX - i;
+                    var y = positionY - j;
+
+                    if(x < 0 || x > GridSize-1 || y < 0 || y > GridSize-1) continue;
+
+                    var neighbour = Squares.Single(s => s.X == x && s.Y == y);
+                    if (neighbour.IsMine)
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            fieldSquare.NumberOfMinesAround = count;
+            fieldSquare.IsRevealed = true;
+
+            return count;
+        }
+
+        public void UpdateMineField(MineSquare square)
+        {
+            if (square.NumberOfMinesAround != 0)
+                return;
+
+            for(var i=-1;  i<2; i++)
+            {
+                for(var j=-1; j<2; j++)
+                {
+                    if (i == 0 && j == 0) continue;
+
+                    var x = square.X - i;
+                    var y = square.Y - j;
+
+                    if (x < 0 || x > GridSize - 1 || y < 0 || y > GridSize - 1) continue;
+
+                    var neighbour = Squares.Single(s => s.X == x && s.Y == y );
+
+                    if (neighbour.IsRevealed) continue;
+
+                    var adjacentMines = RevealSquare(neighbour.X, neighbour.Y);
+                    if (adjacentMines == 0)
+                    {
+                        UpdateMineField(neighbour);
+                    }
+                }
+            }
+        }
+
+        public bool CheckAllMinesRevealed()
+        {
+            return Squares.All(s => s.IsRevealed || s.IsMine);
         }
 
         public void PlaceMinesRandomly(int gridSize, int mines)

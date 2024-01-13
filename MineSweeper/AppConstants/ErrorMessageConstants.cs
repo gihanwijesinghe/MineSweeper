@@ -8,5 +8,6 @@
         public const string MoreThanMaximumGridSize = "Maximum size of grid is 10.";
         public const string MaximumMinesError = "Maximum number is 35% of total sqaures";
         public const string ShouldHaveAtleastOneMine = "There must be at least 1 mine.";
+        public const string GameOverWithRevealingMine = "Oh no, you detonated a mine! Game over.";
     }
 }

@@ -51,11 +51,11 @@ namespace MineSweeper.Validator
             return FunctionResult<int>.Success(int.Parse(input));
         }
 
-        public FunctionResult<MineSquare> ValidateSquareSelection(string input, int gridSize)
+        public FunctionResult<(int, int)> ValidateSquareSelection(string input, int gridSize)
         {
             if(string.IsNullOrEmpty(input) || input.Length != 2)
             {
-                return FunctionResult<MineSquare>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
+                return FunctionResult<(int, int)>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
             }
 
             var val1 = Convert.ToInt32(input[0]);
@@ -64,22 +64,23 @@ namespace MineSweeper.Validator
 
             if (val1 < asciiMinValue || val1 > asciiMaxValue)
             {
-                return FunctionResult<MineSquare>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
+                return FunctionResult<(int, int)>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
             }
 
             var isInteger = char.IsDigit(input[1]);
             if (!isInteger)
             {
-                return FunctionResult<MineSquare>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
+                return FunctionResult<(int, int)>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
             }
 
             var val2 = int.Parse(input[1].ToString());
             if (val2 < 1 || val2 > gridSize)
             {
-                return FunctionResult<MineSquare>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
+                return FunctionResult<(int, int)>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
             }
 
-            return FunctionResult<MineSquare>.Success(new MineSquare(val1, val2));
+            var a = (1, 2);
+            return FunctionResult<(int, int)>.Success((val1 - asciiMinValue, val2-1));
         }
     }
 }

@@ -6,6 +6,6 @@ namespace MineSweeper.Validator
     {
         FunctionResult<int> ValidateGridSize(string input);
         FunctionResult<int> ValidateNumberOfMines(string input, int gridSize);
-        FunctionResult<MineSquare> ValidateSquareSelection(string input, int gridSize);
+        FunctionResult<(int, int)> ValidateSquareSelection(string input, int gridSize);
     }
 }
