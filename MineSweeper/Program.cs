@@ -3,7 +3,7 @@ using MineSweeper;
 using MineSweeper.Commands;
 using MineSweeper.Validator;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Welcome to Minesweeper!");
 
 var consoleCommand = new ConsoleCommand();
 var inputValidator = new InputValidator();

@@ -16,19 +16,35 @@ namespace MineSweeper
 
         public void Run()
         {
-            var gridSize = PromptGridSize(ConsoleCommandConstants.EnterGridSize);
+            var gridSize = PromptGridSize();
+            var numberOfMines = PromptNumberOfMines(gridSize);
         }
 
-        public int PromptGridSize(string promptMessage)
+        public int PromptGridSize()
         {
-            var gridSize = _inputOutputCommand.PromptUser(promptMessage);
+            var gridSize = _inputOutputCommand.PromptUser(ConsoleCommandConstants.EnterGridSize);
 
             var res = _inputValidator.ValidateGridSize(gridSize);
 
             if (!res.IsSuccess)
             {
                 _inputOutputCommand.DisplayError(res.Errors);
-                return PromptGridSize(ConsoleCommandConstants.EnterGridSize);
+                return PromptGridSize();
+            }
+
+            return res.Result;
+        }
+
+        public int PromptNumberOfMines(int gridSize)
+        {
+            var numberOfMines = _inputOutputCommand.PromptUser(ConsoleCommandConstants.EnterNumberOfMines);
+
+            var res = _inputValidator.ValidateNumberOfMines(numberOfMines, gridSize);
+
+            if (!res.IsSuccess)
+            {
+                _inputOutputCommand.DisplayError(res.Errors);
+                return PromptNumberOfMines(gridSize);
             }
 
             return res.Result;
