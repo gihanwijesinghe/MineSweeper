@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MineSweeper
+﻿namespace MineSweeper
 {
-    public class Cell
+    public class MineSquare
     {
         public int X {  get; set; }
         public int Y {  get; set; }
@@ -14,7 +8,7 @@ namespace MineSweeper
         public int NumberOfMinesAround { get; set; }
         public bool IsRevealed { get; set; }
 
-        public Cell(int x, int y) 
+        public MineSquare(int x, int y) 
         { 
             X = x;
             Y = y;
