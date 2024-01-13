@@ -6,9 +6,24 @@ namespace MineSweeper.Validator
     public class InputValidator : IInputValidator
     {
         //private const string PositiveInteger = "^[1-9][0-9]*$";
+        private FunctionResult<bool> ValidateInput(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return FunctionResult<bool>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
+            }
+
+            return FunctionResult<bool>.Success(true);
+        }
 
         public FunctionResult<int> ValidateGridSize(string input)
         {
+            var res = ValidateInput(input);
+            if(!res.IsSuccess)
+            {
+                return FunctionResult<int>.Fail(res.Errors.ToList());
+            }
+
             var isInteger = input.All(char.IsDigit);
             if (!isInteger)
             {
@@ -30,6 +45,12 @@ namespace MineSweeper.Validator
 
         public FunctionResult<int> ValidateNumberOfMines(string input, int gridSize)
         {
+            var res = ValidateInput(input);
+            if (!res.IsSuccess)
+            {
+                return FunctionResult<int>.Fail(res.Errors.ToList());
+            }
+
             var isInteger = input.All(char.IsDigit);
             if (!isInteger)
             {
@@ -53,7 +74,13 @@ namespace MineSweeper.Validator
 
         public FunctionResult<(int, int)> ValidateSquareSelection(string input, int gridSize)
         {
-            if(string.IsNullOrEmpty(input) || input.Length != 2)
+            var res = ValidateInput(input);
+            if (!res.IsSuccess)
+            {
+                return FunctionResult<(int, int)>.Fail(res.Errors.ToList());
+            }
+
+            if (string.IsNullOrEmpty(input) || input.Length != 2)
             {
                 return FunctionResult<(int, int)>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
             }
@@ -79,7 +106,6 @@ namespace MineSweeper.Validator
                 return FunctionResult<(int, int)>.Fail(new FunctionError { Message = ErrorMessageConstants.IncorrectInput });
             }
 
-            var a = (1, 2);
             return FunctionResult<(int, int)>.Success((val1 - asciiMinValue, val2-1));
         }
     }

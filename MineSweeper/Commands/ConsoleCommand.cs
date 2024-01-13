@@ -1,5 +1,4 @@
-﻿using MineSweeper.Command;
-using MineSweeper.Helper;
+﻿using MineSweeper.Helper;
 
 namespace MineSweeper.Commands
 {

@@ -1,76 +1,42 @@
 ﻿using MineSweeper.AppConstants;
-using MineSweeper.Command;
-using MineSweeper.Validator;
-using System.Text;
+using MineSweeper.Commands;
 
 namespace MineSweeper
 {
     public class Game
     {
         private readonly IInputOutputCommand _inputOutputCommand;
-        private readonly IInputValidator _inputValidator;
+        private readonly IUserCommand _userCommand;
         private readonly MineField _mineField;
 
-        public Game(IInputOutputCommand inputOutputCommand, IInputValidator inputValidator) 
+        public Game(IInputOutputCommand inputOutputCommand, IUserCommand userCommand) 
         { 
             _inputOutputCommand = inputOutputCommand;
-            _inputValidator = inputValidator;
+            _userCommand = userCommand;
             _mineField = new MineField();
         }
 
         public void Run()
         {
-
-
             while (true)
             {
                 PlayGame();
             }
-            
-        }
-
-        public int PromptGridSize()
-        {
-            var gridSize = _inputOutputCommand.PromptUser(ConsoleCommandConstants.EnterGridSize);
-
-            var res = _inputValidator.ValidateGridSize(gridSize);
-
-            if (!res.IsSuccess)
-            {
-                _inputOutputCommand.DisplayError(res.Errors);
-                return PromptGridSize();
-            }
-
-            return res.Result;
-        }
-
-        public int PromptNumberOfMines(int gridSize)
-        {
-            var numberOfMines = _inputOutputCommand.PromptUser(ConsoleCommandConstants.EnterNumberOfMines);
-
-            var res = _inputValidator.ValidateNumberOfMines(numberOfMines, gridSize);
-
-            if (!res.IsSuccess)
-            {
-                _inputOutputCommand.DisplayError(res.Errors);
-                return PromptNumberOfMines(gridSize);
-            }
-
-            return res.Result;
         }
 
         public void PlayGame()
         {
-            var gridSize = PromptGridSize();
-            var numberOfMines = PromptNumberOfMines(gridSize);
+            var gridSize = _userCommand.PromptGridSize();
+            var numberOfMines = _userCommand.PromptNumberOfMines(gridSize);
 
             _mineField.Initialize(gridSize, numberOfMines);
-            //DisplayMineField();
-            DisplayMineFieldWithVals();
+
+            _userCommand.DisplayMineField(_mineField);
+            //_userCommand.DisplayMineFieldWithVals(_mineField);
 
             while (true)
             {
-                var squarePosition = PromptSquareSelection();
+                var squarePosition = _userCommand.PromptSquareSelection(gridSize);
                 var mineSquare = _mineField.GetSquareByPosition(squarePosition.Item1, squarePosition.Item2);
 
                 if (mineSquare.IsMine)
@@ -85,7 +51,8 @@ namespace MineSweeper
                 _inputOutputCommand.Display($"This square contains {adjucentMines} adjacent mines.");
                 _mineField.UpdateMineField(mineSquare);
                 _inputOutputCommand.Display(ConsoleCommandConstants.HereIsUpdatedMinField);
-                DisplayMineFieldWithVals();
+                //_userCommand.DisplayMineFieldWithVals(_mineField);
+                _userCommand.DisplayMineField(_mineField);
 
                 var allRevealed = _mineField.CheckAllMinesRevealed();
                 if (allRevealed)
@@ -96,133 +63,7 @@ namespace MineSweeper
                     break;
                 }
             }
-            
-        }
 
-        public (int, int) PromptSquareSelection()
-        {
-            var input = _inputOutputCommand.PromptUser(ConsoleCommandConstants.SelectSquareToReveale);
-
-            var res = _inputValidator.ValidateSquareSelection(input, _mineField.GridSize);
-
-            if (!res.IsSuccess)
-            {
-                _inputOutputCommand.DisplayError(res.Errors);
-                return PromptSquareSelection();
-            }
-
-            return res.Result;
-        }
-
-        public void DisplayMineField()
-        {
-            _inputOutputCommand.Display("");
-            _inputOutputCommand.Display(ConsoleCommandConstants.DisplayMineField);
-
-            var asciiA = Convert.ToInt32(MineSweeperConstants.CharacterA);
-            var sb = new StringBuilder();
-            for (var i=-1; i<_mineField.GridSize; i++)
-            {
-                var row = new List<string>();
-                for (var j = -1; j < _mineField.GridSize; j++)
-                {
-                    if(i == -1)
-                    {
-                        if(j == -1)
-                        {
-                            row.Add(" ");
-                        }
-                        else
-                        {
-                            row.Add((j + 1).ToString());
-                        }
-                    }
-                    else
-                    {
-                        if(j == -1)
-                        {
-                            row.Add(((char)(asciiA + i)).ToString());
-                        }
-                        else
-                        {
-                            var mineSquare = _mineField.Squares.Single(s => s.X == i && s.Y == j);
-                            if (!mineSquare.IsRevealed)
-                            {
-                                row.Add("_");
-                            }
-                            else
-                            {
-                                row.Add(mineSquare.NumberOfMinesAround.ToString());
-                            }
-                        }
-                    }
-                    
-                }
-                var s = string.Join(" ", row);
-                sb.Append(s);
-                sb.AppendLine();
-            }
-
-            _inputOutputCommand.Display(sb.ToString());
-        }
-
-        public void DisplayMineFieldWithVals()
-        {
-            _inputOutputCommand.Display("");
-            _inputOutputCommand.Display(ConsoleCommandConstants.DisplayMineField);
-
-            var asciiA = Convert.ToInt32(MineSweeperConstants.CharacterA);
-            var sb = new StringBuilder();
-            for (var i = -1; i < _mineField.GridSize; i++)
-            {
-                var row = new List<string>();
-                for (var j = -1; j < _mineField.GridSize; j++)
-                {
-                    if (i == -1)
-                    {
-                        if (j == -1)
-                        {
-                            row.Add(" ");
-                        }
-                        else
-                        {
-                            row.Add((j + 1).ToString());
-                        }
-                    }
-                    else
-                    {
-                        if (j == -1)
-                        {
-                            row.Add(((char)(asciiA + i)).ToString());
-                        }
-                        else
-                        {
-                            var mineSquare = _mineField.Squares.Single(s => s.X == i && s.Y == j);
-                            if (mineSquare.IsMine)
-                            {
-                                row.Add("*");
-                            }
-                            else
-                            {
-                                if (mineSquare.IsRevealed)
-                                {
-                                    row.Add(mineSquare.NumberOfMinesAround.ToString());
-                                }
-                                else {
-                                    row.Add("?");
-                                }
-                                
-                            }
-                        }
-                    }
-
-                }
-                var s = string.Join(" ", row);
-                sb.Append(s);
-                sb.AppendLine();
-            }
-
-            _inputOutputCommand.Display(sb.ToString());
         }
     }
 }

@@ -7,8 +7,8 @@ Console.WriteLine("Welcome to Minesweeper!");
 
 var consoleCommand = new ConsoleCommand();
 var inputValidator = new InputValidator();
+var consoleUserCommand = new ConsoleUserCommand(inputValidator);
 
-
-var game = new Game(consoleCommand, inputValidator);
+var game = new Game(consoleCommand, consoleUserCommand);
 
 game.Run();
