@@ -7,7 +7,7 @@
 - Build and run the application to start the Mine Sweeper game
 
 ## Running MineSweeper Game
-- Game will prompt console inputs based on conditions
+- Game will prompt console inputs based on following conditions
   1. Prompt user to "Enter the size of the grid"
   2. Prompt user to "Enter the number of mines to place on the grid"
   3. Game will generate the mine field and place mines randomly (User is not able to see where mines are placed)
@@ -26,8 +26,8 @@ This project has two main interactions
    - Also contains IInputOutput interface which can be extendable to use with input output operations globally.
    - Also contains IInputValidator interface to validate inputs and fetch required output
 3. Game logic
-   - Contains MineSquare and MineField models
-   - Contains GameGenerator which controls the request pipeline of the game (making decisions and arrangement)
-   - Contains MineFieldGenerator which do the changes in the minefield according to user inputs
+   - Contains "MineSquare" and "MineField" models
+   - Contains "GameGenerator" which controls the request pipeline of the game (making decisions and arrangement)
+   - Contains "MineFieldGenerator" which do the changes in the minefield according to user inputs
   
    Apart from main interactions there are few implementations (such as helpers, constants, errors) used to integrate project functionality 
