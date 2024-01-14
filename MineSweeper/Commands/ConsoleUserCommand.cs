@@ -17,7 +17,7 @@ namespace MineSweeper.Commands
 
         public int PromptGridSize()
         {
-            var gridSize = _inputOutput.PromptUser(ConsoleCommandConstants.EnterGridSize);
+            var gridSize = _inputOutput.PromptQuestion(ConsoleCommandConstants.EnterGridSize);
 
             var res = _inputValidator.ValidateAndGetGridSize(gridSize);
 
@@ -32,7 +32,7 @@ namespace MineSweeper.Commands
 
         public (int, int) PromptSquareSelection(int gridSize)
         {
-            var input = _inputOutput.PromptUser(ConsoleCommandConstants.SelectSquareToReveale);
+            var input = _inputOutput.PromptQuestion(ConsoleCommandConstants.SelectSquareToReveale);
 
             var res = _inputValidator.ValidateAndGetSquarePositions(input, gridSize);
 
@@ -47,7 +47,7 @@ namespace MineSweeper.Commands
 
         public int PromptNumberOfMines(int gridSize)
         {
-            var numberOfMines = _inputOutput.PromptUser(ConsoleCommandConstants.EnterNumberOfMines);
+            var numberOfMines = _inputOutput.PromptQuestion(ConsoleCommandConstants.EnterNumberOfMines);
 
             var res = _inputValidator.ValidateAndGetNumberOfMines(numberOfMines, gridSize);
 
@@ -70,9 +70,15 @@ namespace MineSweeper.Commands
             {
                 _inputOutput.Display(ErrorMessageConstants.GameOverWithRevealingMine);
             }
-            
-            _inputOutput.Display(ConsoleCommandConstants.PressAnyToPlayAgain);
-            Console.ReadKey();
+
+            _inputOutput.PromptKey(ConsoleCommandConstants.PressAnyToPlayAgain);
+        }
+
+        public void DisplayAdjacentMinesAndMineField(MineField mineField, int adjacentMines)
+        {
+            _inputOutput.Display($"This square contains {adjacentMines} adjacent mines.");
+            _inputOutput.Display(ConsoleCommandConstants.HereIsUpdatedMinField);
+            DisplayMineField(mineField);
         }
 
         public void DisplayMineField(MineField mineField)

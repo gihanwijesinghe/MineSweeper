@@ -6,6 +6,7 @@ namespace MineSweeper.Commands
     {
         void Display(string message);
         void DisplayError(IList<FunctionError> errors);
-        string PromptUser(string question);
+        string PromptQuestion(string question);
+        ConsoleKeyInfo PromptKey(string message);
     }
 }

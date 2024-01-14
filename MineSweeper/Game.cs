@@ -1,17 +1,14 @@
-﻿using MineSweeper.AppConstants;
-using MineSweeper.Commands;
+﻿using MineSweeper.Commands;
 
 namespace MineSweeper
 {
     public class Game
     {
-        private readonly IInputOutput _inputOutput;
         private readonly IUserCommand _userCommand;
         private readonly MineField _mineField;
 
-        public Game(IInputOutput inputOutput, IUserCommand userCommand) 
-        { 
-            _inputOutput= inputOutput;
+        public Game(IUserCommand userCommand) 
+        {
             _userCommand = userCommand;
             _mineField = new MineField();
         }
@@ -30,9 +27,7 @@ namespace MineSweeper
             var numberOfMines = _userCommand.PromptNumberOfMines(gridSize);
 
             _mineField.Initialize(gridSize, numberOfMines);
-
             _userCommand.DisplayMineField(_mineField);
-            //_userCommand.DisplayMineFieldWithVals(_mineField);
 
             while (true)
             {
@@ -45,12 +40,10 @@ namespace MineSweeper
                     break;
                 }
 
-                var adjucentMines = _mineField.RevealSquare(squarePosition.Item1, squarePosition.Item2);
-                _inputOutput.Display($"This square contains {adjucentMines} adjacent mines.");
+                var adjacentMines = _mineField.RevealSquare(squarePosition.Item1, squarePosition.Item2);
                 _mineField.UpdateMineField(mineSquare);
-                _inputOutput.Display(ConsoleCommandConstants.HereIsUpdatedMinField);
-                //_userCommand.DisplayMineFieldWithVals(_mineField);
-                _userCommand.DisplayMineField(_mineField);
+
+                _userCommand.DisplayAdjacentMinesAndMineField(_mineField, adjacentMines);
 
                 var allRevealed = _mineField.CheckAllMinesRevealed();
                 if (allRevealed)

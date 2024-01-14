@@ -9,15 +9,21 @@ namespace MineSweeper.Commands
             Console.WriteLine(message);
         }
 
-        public string PromptUser(string question)
+        public void DisplayError(IList<FunctionError> errors)
+        {
+            Display(string.Join(", ", errors.Select(e => e.Message)));
+        }
+
+        public string PromptQuestion(string question)
         {
             Display(question);
             return Console.ReadLine();
         }
 
-        public void DisplayError(IList<FunctionError> errors)
+        public ConsoleKeyInfo PromptKey(string message)
         {
-            Display(string.Join(", ", errors.Select(e => e.Message)));
+            Display(message);
+            return Console.ReadKey();
         }
     }
 }
