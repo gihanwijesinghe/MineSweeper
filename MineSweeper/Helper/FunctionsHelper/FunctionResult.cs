@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace MineSweeper.Helper
+﻿namespace MineSweeper.Helper.FunctionsHelper
 {
     public class FunctionResult<T>
     {

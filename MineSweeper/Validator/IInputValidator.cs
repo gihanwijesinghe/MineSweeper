@@ -1,4 +1,4 @@
-﻿using MineSweeper.Helper;
+﻿using MineSweeper.Helper.FunctionsHelper;
 
 namespace MineSweeper.Validator
 {

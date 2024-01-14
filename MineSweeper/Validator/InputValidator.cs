@@ -1,5 +1,5 @@
 ﻿using MineSweeper.AppConstants;
-using MineSweeper.Helper;
+using MineSweeper.Helper.FunctionsHelper;
 
 namespace MineSweeper.Validator
 {

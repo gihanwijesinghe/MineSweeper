@@ -7,10 +7,10 @@ namespace MineSweeper
         private readonly IUserCommand _userCommand;
         private readonly MineField _mineField;
 
-        public Game(IUserCommand userCommand) 
+        public Game(IUserCommand userCommand, MineField mineField) 
         {
             _userCommand = userCommand;
-            _mineField = new MineField();
+            _mineField = mineField;
         }
 
         public void Run()

@@ -1,25 +1,30 @@
-﻿using MineSweeper.AppConstants;
-using MineSweeper.Helper;
+﻿using MineSweeper.Helper.NumbersHelper;
 
 namespace MineSweeper
 {
     public class MineField
     {
-        private readonly Random _random = new Random();
+        private readonly IRandomGenerator _randomGenerator;
 
         public IList<MineSquare> Squares { get; set; }
         public int GridSize { get; set; }
+
+        public MineField(IRandomGenerator randomGenerator) 
+        { 
+           _randomGenerator = randomGenerator;
+            Squares = new List<MineSquare>();
+        }
 
         public void Initialize(int gridSize, int mines)
         {
             Squares = new List<MineSquare>();
             GridSize = gridSize;
 
-            CreateInitialMineField(gridSize);
+            GenerateInitialMineField(gridSize);
             PlaceMinesRandomly(gridSize, mines);
         }
 
-        public void CreateInitialMineField(int gridSize)
+        public void GenerateInitialMineField(int gridSize)
         {
             for (var i = 0; i < gridSize; i++)
             {
@@ -29,6 +34,29 @@ namespace MineSweeper
                     Squares.Add(square);
                 }
             }
+        }
+
+        public void PlaceMinesRandomly(int gridSize, int mines)
+        {
+            //Assume squares are numbered like below as squareNumbers
+            // 0 1 2
+            // 3 4 5
+            // 6 7 8
+
+            var randomSquares = _randomGenerator.GenerateRandomIntegers(mines, gridSize * gridSize - 1);
+            foreach (var squareNumber in randomSquares)
+            {
+                var x = squareNumber / gridSize;
+                var y = squareNumber % gridSize;
+
+                var mineSquare = Squares.FirstOrDefault(s => s.X == x && s.Y == y);
+                mineSquare.IsMine = true;
+            }
+        }
+
+        public bool CheckAllMinesRevealed()
+        {
+            return Squares.All(s => s.IsRevealed || s.IsMine);
         }
 
         public MineSquare GetSquareByPosition(int x, int y)
@@ -98,40 +126,6 @@ namespace MineSweeper
             }
         }
 
-        public bool CheckAllMinesRevealed()
-        {
-            return Squares.All(s => s.IsRevealed || s.IsMine);
-        }
 
-        public void PlaceMinesRandomly(int gridSize, int mines)
-        {
-            //Assume squares are numbered like below as squareNumbers
-            // 0 1 2
-            // 3 4 5
-            // 6 7 8
-
-            var randomNumbers = new SortedSet<int>();
-            for (var i = 0; i < mines; i++)
-            {
-                var squareNumber = GenerateRandomNumber();
-                var x = squareNumber / gridSize;
-                var y = squareNumber % gridSize;
-
-                var mineSquare = Squares.FirstOrDefault(s => s.X == x && s.Y == y);
-                mineSquare.IsMine = true;
-            }
-
-            int GenerateRandomNumber()
-            {
-                var randomNumber = _random.Next(0, gridSize * gridSize - 1);
-                if(randomNumbers.Contains(randomNumber))
-                {
-                    return GenerateRandomNumber();
-                }
-
-                randomNumbers.Add(randomNumber);
-                return randomNumber;
-            }
-        }
     }
 }
