@@ -16,7 +16,7 @@ namespace MineSweeper.Validator
             return FunctionResult<bool>.Success(true);
         }
 
-        public FunctionResult<int> ValidateGridSize(string input)
+        public FunctionResult<int> ValidateAndGetGridSize(string input)
         {
             var res = ValidateInput(input);
             if(!res.IsSuccess)
@@ -43,7 +43,7 @@ namespace MineSweeper.Validator
             return FunctionResult<int>.Success(int.Parse(input));
         }
 
-        public FunctionResult<int> ValidateNumberOfMines(string input, int gridSize)
+        public FunctionResult<int> ValidateAndGetNumberOfMines(string input, int gridSize)
         {
             var res = ValidateInput(input);
             if (!res.IsSuccess)
@@ -72,7 +72,7 @@ namespace MineSweeper.Validator
             return FunctionResult<int>.Success(int.Parse(input));
         }
 
-        public FunctionResult<(int, int)> ValidateSquareSelection(string input, int gridSize)
+        public FunctionResult<(int, int)> ValidateAndGetSquarePositions(string input, int gridSize)
         {
             var res = ValidateInput(input);
             if (!res.IsSuccess)

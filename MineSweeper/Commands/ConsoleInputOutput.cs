@@ -2,7 +2,7 @@
 
 namespace MineSweeper.Commands
 {
-    public class ConsoleCommand : IInputOutputCommand
+    public class ConsoleInputOutput: IInputOutput
     {
         public void Display(string message)
         {

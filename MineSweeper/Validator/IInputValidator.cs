@@ -4,8 +4,8 @@ namespace MineSweeper.Validator
 {
     public interface IInputValidator
     {
-        FunctionResult<int> ValidateGridSize(string input);
-        FunctionResult<int> ValidateNumberOfMines(string input, int gridSize);
-        FunctionResult<(int, int)> ValidateSquareSelection(string input, int gridSize);
+        FunctionResult<int> ValidateAndGetGridSize(string input);
+        FunctionResult<int> ValidateAndGetNumberOfMines(string input, int gridSize);
+        FunctionResult<(int, int)> ValidateAndGetSquarePositions(string input, int gridSize);
     }
 }

@@ -5,13 +5,13 @@ namespace MineSweeper
 {
     public class Game
     {
-        private readonly IInputOutputCommand _inputOutputCommand;
+        private readonly IInputOutput _inputOutput;
         private readonly IUserCommand _userCommand;
         private readonly MineField _mineField;
 
-        public Game(IInputOutputCommand inputOutputCommand, IUserCommand userCommand) 
+        public Game(IInputOutput inputOutput, IUserCommand userCommand) 
         { 
-            _inputOutputCommand = inputOutputCommand;
+            _inputOutput= inputOutput;
             _userCommand = userCommand;
             _mineField = new MineField();
         }
@@ -41,25 +41,21 @@ namespace MineSweeper
 
                 if (mineSquare.IsMine)
                 {
-                    _inputOutputCommand.Display(ErrorMessageConstants.GameOverWithRevealingMine);
-                    _inputOutputCommand.Display(ConsoleCommandConstants.PressAnyToPlayAgain);
-                    Console.ReadKey();
+                    _userCommand.PromptPlayAgain(false);
                     break;
                 }
 
                 var adjucentMines = _mineField.RevealSquare(squarePosition.Item1, squarePosition.Item2);
-                _inputOutputCommand.Display($"This square contains {adjucentMines} adjacent mines.");
+                _inputOutput.Display($"This square contains {adjucentMines} adjacent mines.");
                 _mineField.UpdateMineField(mineSquare);
-                _inputOutputCommand.Display(ConsoleCommandConstants.HereIsUpdatedMinField);
+                _inputOutput.Display(ConsoleCommandConstants.HereIsUpdatedMinField);
                 //_userCommand.DisplayMineFieldWithVals(_mineField);
                 _userCommand.DisplayMineField(_mineField);
 
                 var allRevealed = _mineField.CheckAllMinesRevealed();
                 if (allRevealed)
                 {
-                    _inputOutputCommand.Display(ConsoleCommandConstants.CongratulationsWon);
-                    _inputOutputCommand.Display(ConsoleCommandConstants.PressAnyToPlayAgain);
-                    Console.ReadKey();
+                    _userCommand.PromptPlayAgain(true);
                     break;
                 }
             }

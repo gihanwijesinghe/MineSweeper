@@ -5,10 +5,10 @@ using MineSweeper.Validator;
 
 Console.WriteLine("Welcome to Minesweeper!");
 
-var consoleCommand = new ConsoleCommand();
+var consoleInputOutput = new ConsoleInputOutput();
 var inputValidator = new InputValidator();
 var consoleUserCommand = new ConsoleUserCommand(inputValidator);
 
-var game = new Game(consoleCommand, consoleUserCommand);
+var game = new Game(consoleInputOutput, consoleUserCommand);
 
 game.Run();

@@ -2,7 +2,7 @@
 
 namespace MineSweeper.Commands
 {
-    public interface IInputOutputCommand
+    public interface IInputOutput
     {
         void Display(string message);
         void DisplayError(IList<FunctionError> errors);
