@@ -1,4 +1,6 @@
-﻿namespace MineSweeper.Commands
+﻿using MineSweeper.Models;
+
+namespace MineSweeper.Commands
 {
     //TODO: Implement functionality for GUI user interface commands accordingly
     public class GuiUsercommand : IUserCommand

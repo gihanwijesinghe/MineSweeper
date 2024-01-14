@@ -1,4 +1,5 @@
 ﻿using MineSweeper.AppConstants;
+using MineSweeper.Models;
 using MineSweeper.Operations;
 using MineSweeper.Validator;
 using System.Text;

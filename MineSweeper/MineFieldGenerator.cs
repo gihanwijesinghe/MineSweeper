@@ -1,24 +1,22 @@
 ﻿using MineSweeper.Helper.NumbersHelper;
+using MineSweeper.Models;
 
 namespace MineSweeper
 {
-    public class MineField
+    public class MineFieldGenerator
     {
         private readonly IRandomGenerator _randomGenerator;
 
-        public IList<MineSquare> Squares { get; set; }
-        public int GridSize { get; set; }
+        public MineField MineField { get; set; }
 
-        public MineField(IRandomGenerator randomGenerator) 
+        public MineFieldGenerator(IRandomGenerator randomGenerator) 
         { 
            _randomGenerator = randomGenerator;
-            Squares = new List<MineSquare>();
         }
 
         public void Initialize(int gridSize, int mines)
         {
-            Squares = new List<MineSquare>();
-            GridSize = gridSize;
+            MineField = new MineField(gridSize);
 
             GenerateInitialMineField(gridSize);
             PlaceMinesRandomly(gridSize, mines);
@@ -31,7 +29,7 @@ namespace MineSweeper
                 for (var j = 0; j < gridSize; j++)
                 {
                     var square = new MineSquare(i, j);
-                    Squares.Add(square);
+                    MineField.Squares.Add(square);
                 }
             }
         }
@@ -49,19 +47,19 @@ namespace MineSweeper
                 var x = squareNumber / gridSize;
                 var y = squareNumber % gridSize;
 
-                var mineSquare = Squares.FirstOrDefault(s => s.X == x && s.Y == y);
+                var mineSquare = MineField.Squares.FirstOrDefault(s => s.X == x && s.Y == y);
                 mineSquare.IsMine = true;
             }
         }
 
         public bool CheckAllMinesRevealed()
         {
-            return Squares.All(s => s.IsRevealed || s.IsMine);
+            return MineField.Squares.All(s => s.IsRevealed || s.IsMine);
         }
 
         public MineSquare GetSquareByPosition(int x, int y)
         {
-            var fieldSquare = Squares.Single(s => s.X == x && s.Y == y);
+            var fieldSquare = MineField.Squares.Single(s => s.X == x && s.Y == y);
             return fieldSquare;
         }
 
@@ -79,9 +77,9 @@ namespace MineSweeper
                     var x = fieldSquare.X - i;
                     var y = fieldSquare.Y - j;
 
-                    if(x < 0 || x > GridSize-1 || y < 0 || y > GridSize-1) continue;
+                    if(x < 0 || x > MineField.GridSize -1 || y < 0 || y > MineField.GridSize -1) continue;
 
-                    var neighbour = Squares.Single(s => s.X == x && s.Y == y);
+                    var neighbour = MineField.Squares.Single(s => s.X == x && s.Y == y);
                     if (neighbour.IsMine)
                     {
                         count++;
@@ -109,9 +107,9 @@ namespace MineSweeper
                     var x = square.X - i;
                     var y = square.Y - j;
 
-                    if (x < 0 || x > GridSize - 1 || y < 0 || y > GridSize - 1) continue;
+                    if (x < 0 || x > MineField.GridSize - 1 || y < 0 || y > MineField.GridSize - 1) continue;
 
-                    var neighbour = Squares.Single(s => s.X == x && s.Y == y );
+                    var neighbour = MineField.Squares.Single(s => s.X == x && s.Y == y );
 
                     if (neighbour.IsRevealed) continue;
 

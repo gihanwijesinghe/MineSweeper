@@ -1,20 +1,21 @@
 ﻿using MineSweeper.AppConstants;
 using MineSweeper.Commands;
+using MineSweeper.Models;
 using MineSweeper.Operations;
 
 namespace MineSweeper
 {
-    public class Game
+    public class GameGenerator
     {
         private readonly IUserCommand _userCommand;
         private readonly IInputOutput _inputOutput;
-        private readonly MineField _mineField;
+        private readonly MineFieldGenerator _mineFieldGenerator;
 
-        public Game(IUserCommand userCommand, IInputOutput inputOutput, MineField mineField) 
+        public GameGenerator(IUserCommand userCommand, IInputOutput inputOutput, MineFieldGenerator mineFieldGenerator) 
         {
             _userCommand = userCommand;
             _inputOutput = inputOutput;
-            _mineField = mineField;
+            _mineFieldGenerator = mineFieldGenerator;
         }
 
         public void Run()
@@ -31,8 +32,8 @@ namespace MineSweeper
             var gridSize = _userCommand.PromptGridSize();
             var numberOfMines = _userCommand.PromptNumberOfMines(gridSize);
 
-            _mineField.Initialize(gridSize, numberOfMines);
-            _userCommand.DisplayMineField(_mineField);
+            _mineFieldGenerator.Initialize(gridSize, numberOfMines);
+            _userCommand.DisplayMineField(_mineFieldGenerator.MineField);
 
             SelectSquareAndRevealMineField();
         }
@@ -50,7 +51,7 @@ namespace MineSweeper
 
                 RevealUpdateAndDisplayMinField(mineSquare);
 
-                var allRevealed = _mineField.CheckAllMinesRevealed();
+                var allRevealed = _mineFieldGenerator.CheckAllMinesRevealed();
                 if (allRevealed)
                 {
                     _userCommand.PromptPlayAgain(true);
@@ -61,15 +62,17 @@ namespace MineSweeper
 
         public MineSquare SelectSquare()
         {
+            var _mineField = _mineFieldGenerator.MineField;
             var squarePosition = _userCommand.PromptSquareSelection(_mineField.GridSize);
-            return _mineField.GetSquareByPosition(squarePosition.Item1, squarePosition.Item2);
+            return _mineFieldGenerator.GetSquareByPosition(squarePosition.Item1, squarePosition.Item2);
         }
 
         public void RevealUpdateAndDisplayMinField(MineSquare mineSquare)
         {
-            var adjacentMines = _mineField.RevealSquare(mineSquare);
-            _mineField.UpdateMineField(mineSquare);
+            var adjacentMines = _mineFieldGenerator.RevealSquare(mineSquare);
+            _mineFieldGenerator.UpdateMineField(mineSquare);
 
+            var _mineField = _mineFieldGenerator.MineField;
             _userCommand.DisplayAdjacentMinesAndMineField(_mineField, adjacentMines);
         }
     }

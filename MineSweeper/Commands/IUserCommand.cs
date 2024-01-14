@@ -1,4 +1,6 @@
-﻿namespace MineSweeper.Commands
+﻿using MineSweeper.Models;
+
+namespace MineSweeper.Commands
 {
     public interface IUserCommand
     {

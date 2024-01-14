@@ -10,8 +10,8 @@ var consoleInputOutput = new ConsoleInputOutput();
 var consoleUserCommand = new ConsoleUserCommand(inputValidator, consoleInputOutput);
 
 var randomeGenerator = new RandomGenerator();
-var mineField = new MineField(randomeGenerator);
+var mineFieldGenerator = new MineFieldGenerator(randomeGenerator);
 
-var game = new Game(consoleUserCommand, consoleInputOutput, mineField);
+var gameGenerator = new GameGenerator(consoleUserCommand, consoleInputOutput, mineFieldGenerator);
 
-game.Run();
+gameGenerator.Run();
