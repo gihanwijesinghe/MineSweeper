@@ -27,7 +27,9 @@ This project has two main interactions
    - Also contains IInputValidator interface to validate inputs and fetch required output
 3. Game logic
    - Contains "MineSquare" and "MineField" models
+   - Here list of Squares is used to create the MineField instead of 2D array.
    - Contains "GameGenerator" which controls the request pipeline of the game (making decisions and arrangement)
    - Contains "MineFieldGenerator" which do the changes in the minefield according to user inputs
   
-   Apart from main interactions there are few implementations (such as helpers, constants, errors) used to integrate project functionality 
+Apart from main interactions there are few implementations (such as helpers, constants, errors) used to integrate project functionality 
+
