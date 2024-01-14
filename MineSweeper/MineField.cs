@@ -65,10 +65,8 @@ namespace MineSweeper
             return fieldSquare;
         }
 
-        public int RevealSquare(int positionX, int positionY)
+        public int RevealSquare(MineSquare fieldSquare)
         {
-            var fieldSquare = Squares.Single(s => s.X == positionX && s.Y == positionY);
-
             if (fieldSquare.IsRevealed) return fieldSquare.NumberOfMinesAround;
 
             var count = 0;
@@ -78,8 +76,8 @@ namespace MineSweeper
                 {
                     if (i == 0 && j == 0) continue;
 
-                    var x = positionX - i;
-                    var y = positionY - j;
+                    var x = fieldSquare.X - i;
+                    var y = fieldSquare.Y - j;
 
                     if(x < 0 || x > GridSize-1 || y < 0 || y > GridSize-1) continue;
 
@@ -117,7 +115,7 @@ namespace MineSweeper
 
                     if (neighbour.IsRevealed) continue;
 
-                    var adjacentMines = RevealSquare(neighbour.X, neighbour.Y);
+                    var adjacentMines = RevealSquare(neighbour);
                     if (adjacentMines == 0)
                     {
                         UpdateMineField(neighbour);
@@ -125,7 +123,5 @@ namespace MineSweeper
                 }
             }
         }
-
-
     }
 }

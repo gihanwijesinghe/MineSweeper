@@ -3,7 +3,7 @@ using MineSweeper.Helper.FunctionsHelper;
 
 namespace MineSweeper.Validator
 {
-    public class InputValidator : IInputValidator
+    public class ConsoleInputValidator : IInputValidator
     {
         //private const string PositiveInteger = "^[1-9][0-9]*$";
         private FunctionResult<bool> ValidateInput(string input)

@@ -1,8 +1,8 @@
 ﻿using MineSweeper.Helper.FunctionsHelper;
 
-namespace MineSweeper.Commands
+namespace MineSweeper.Operations
 {
-    public class ConsoleInputOutput: IInputOutput
+    public class ConsoleInputOutput : IInputOutput
     {
         public void Display(string message)
         {

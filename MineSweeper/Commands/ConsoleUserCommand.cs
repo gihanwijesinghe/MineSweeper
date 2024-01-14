@@ -1,4 +1,5 @@
 ﻿using MineSweeper.AppConstants;
+using MineSweeper.Operations;
 using MineSweeper.Validator;
 using System.Text;
 
@@ -9,10 +10,10 @@ namespace MineSweeper.Commands
         private readonly IInputOutput _inputOutput;
         private readonly IInputValidator _inputValidator;
 
-        public ConsoleUserCommand(IInputValidator inputValidator) 
+        public ConsoleUserCommand(IInputValidator inputValidator, IInputOutput inputOutput) 
         { 
             _inputValidator = inputValidator;
-            _inputOutput = new ConsoleInputOutput();
+            _inputOutput = inputOutput;
         }
 
         public int PromptGridSize()

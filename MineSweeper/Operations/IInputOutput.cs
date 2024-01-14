@@ -1,6 +1,6 @@
 ﻿using MineSweeper.Helper.FunctionsHelper;
 
-namespace MineSweeper.Commands
+namespace MineSweeper.Operations
 {
     public interface IInputOutput
     {
