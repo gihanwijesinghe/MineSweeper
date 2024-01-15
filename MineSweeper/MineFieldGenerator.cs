@@ -12,11 +12,13 @@ namespace MineSweeper
         public MineFieldGenerator(IRandomGenerator randomGenerator) 
         { 
            _randomGenerator = randomGenerator;
+           MineField = new MineField();
         }
 
         public void Initialize(int gridSize, int mines)
         {
-            MineField = new MineField(gridSize);
+            MineField.GridSize = gridSize;
+            MineField.Squares = new List<MineSquare>();
 
             GenerateInitialMineField(gridSize);
             PlaceMinesRandomly(gridSize, mines);

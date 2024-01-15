@@ -62,7 +62,7 @@ namespace MineSweeper.Commands
             return res.Result;
         }
 
-        public void PromptPlayAgain(bool won)
+        public bool PromptPlayAgain(bool won, bool playAgain)
         {
             if (won)
             {
@@ -74,6 +74,8 @@ namespace MineSweeper.Commands
             }
 
             _inputOutput.PromptKey(ConsoleCommandConstants.PressAnyToPlayAgain);
+
+            return playAgain;
         }
 
         public void DisplayAdjacentMinesAndMineField(MineField mineField, int adjacentMines)

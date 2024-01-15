@@ -7,7 +7,7 @@ namespace MineSweeper.Commands
         int PromptGridSize();
         int PromptNumberOfMines(int gridSize);
         (int, int) PromptSquareSelection(int gridSize);
-        void PromptPlayAgain(bool won);
+        bool PromptPlayAgain(bool won, bool playAgain);
         void DisplayMineField(MineField mineField);
         void DisplayAdjacentMinesAndMineField(MineField mineField, int adjacentMines);
         void DisplayMineFieldWithVals(MineField mineField);

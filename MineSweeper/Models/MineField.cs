@@ -5,9 +5,8 @@
         public int GridSize { get; set; }
         public IList<MineSquare> Squares { get; set; }
 
-        public MineField(int gridSize) 
-        { 
-            GridSize = gridSize;
+        public MineField() 
+        {
             Squares = new List<MineSquare>();
         }
     }

@@ -10,18 +10,22 @@ namespace MineSweeper
         private readonly IUserCommand _userCommand;
         private readonly IInputOutput _inputOutput;
         private readonly MineFieldGenerator _mineFieldGenerator;
+        public readonly MineGame MineGame;
 
         public GameGenerator(IUserCommand userCommand, IInputOutput inputOutput, MineFieldGenerator mineFieldGenerator) 
         {
             _userCommand = userCommand;
             _inputOutput = inputOutput;
             _mineFieldGenerator = mineFieldGenerator;
+            MineGame = new MineGame();
         }
 
         public void Run()
         {
             _inputOutput.Display(MineSweeperConstants.WelcomeMessage);
-            while (true)
+
+            MineGame.State = GameState.Running;
+            while (MineGame.State == GameState.Running)
             {
                 PlayGame();
             }
@@ -45,7 +49,12 @@ namespace MineSweeper
                 var mineSquare = SelectSquare();
                 if (mineSquare.IsMine)
                 {
-                    _userCommand.PromptPlayAgain(false);
+                    MineGame.CurrentResult = GameResult.Lose;
+                    var playAgain = _userCommand.PromptPlayAgain(false, true);
+                    if (!playAgain)
+                    {
+                        MineGame.State = GameState.Stop;
+                    }
                     break;
                 }
 
@@ -54,7 +63,12 @@ namespace MineSweeper
                 var allRevealed = _mineFieldGenerator.CheckAllMinesRevealed();
                 if (allRevealed)
                 {
-                    _userCommand.PromptPlayAgain(true);
+                    MineGame.CurrentResult = GameResult.Win;
+                    var playAgain = _userCommand.PromptPlayAgain(true, true);
+                    if (!playAgain)
+                    {
+                        MineGame.State = GameState.Stop;
+                    }
                     break;
                 }
             }
