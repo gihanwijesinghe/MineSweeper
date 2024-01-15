@@ -49,12 +49,7 @@ namespace MineSweeper
                 var mineSquare = SelectSquare();
                 if (mineSquare.IsMine)
                 {
-                    MineGame.CurrentResult = GameResult.Lose;
-                    var playAgain = _userCommand.PromptPlayAgain(false, true);
-                    if (!playAgain)
-                    {
-                        MineGame.State = GameState.Stop;
-                    }
+                    PlayAgain(GameResult.Lose);
                     break;
                 }
 
@@ -63,12 +58,7 @@ namespace MineSweeper
                 var allRevealed = _mineFieldGenerator.CheckAllMinesRevealed();
                 if (allRevealed)
                 {
-                    MineGame.CurrentResult = GameResult.Win;
-                    var playAgain = _userCommand.PromptPlayAgain(true, true);
-                    if (!playAgain)
-                    {
-                        MineGame.State = GameState.Stop;
-                    }
+                    PlayAgain(GameResult.Win);
                     break;
                 }
             }
@@ -88,6 +78,27 @@ namespace MineSweeper
 
             var _mineField = _mineFieldGenerator.MineField;
             _userCommand.DisplayAdjacentMinesAndMineField(_mineField, adjacentMines);
+        }
+
+        public void PlayAgain(GameResult gameResult)
+        {
+            MineGame.CurrentResult = gameResult;
+            var playAgain = true;
+
+            switch (gameResult)
+            {
+                case GameResult.Win:
+                    playAgain = _userCommand.PromptPlayAgain(true, true);
+                    break;
+                case GameResult.Lose:
+                    playAgain = _userCommand.PromptPlayAgain(false, true);
+                    break;
+                default: break;
+            }
+            if (!playAgain)
+            {
+                MineGame.State = GameState.Stop;
+            }
         }
     }
 }

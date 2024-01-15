@@ -7,7 +7,7 @@ namespace MineSweeperTests
     public class GameGeneratorTests
     {
         [Test]
-        public void ShouldTrueRunTest()
+        public void ShouldGameFalseRunTest()
         {
             // Arrange
             var randomGenerator = new MockRandomGenerator();
